@@ -23,8 +23,7 @@ export const App: React.FC = () => {
   const [isLoading, setLoading] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
-  const [loadeorUser, setLoaderUser] = useState(false);
-  const [isLoadingModal, setIsLoadingModal] = useState(false);
+  const [loaderUser, setLoaderUser] = useState(false);
 
   const [selectedTodo, setSelectedTodo] = useState<Todo | null>(null);
   const [category, setCategory] = useState<Category>("all");
@@ -34,7 +33,6 @@ export const App: React.FC = () => {
     if (!todoId) {
       setSelectedTodo(null);
       setUser(null);
-      setIsLoadingModal(false);
 
       return;
     }
@@ -45,19 +43,18 @@ export const App: React.FC = () => {
       return;
     }
 
-    setIsLoadingModal(true);
-    setUser(null);
+    setSelectedTodo(todo);
     setLoaderUser(true);
+    setUser(null);
 
     try {
       const userData = await getUser(todo.userId);
 
-      setSelectedTodo(todo);
       setUser(userData);
     } catch (error) {
+      // Error loading user
     } finally {
       setLoaderUser(false);
-      setIsLoadingModal(false);
     }
   };
 
@@ -124,16 +121,9 @@ export const App: React.FC = () => {
               )}
             </div>
 
-            {isLoadingModal && (
-              <div className="modal is-active">
-                <div className="modal-background" />
-                <Loader />
-              </div>
-            )}
-
-            {selectedTodo && !isLoadingModal && (
+            {selectedTodo && (
               <TodoModal
-                loaderUser={loadeorUser}
+                loaderUser={loaderUser}
                 selectedTodo={selectedTodo}
                 user={user}
                 onModalClose={setSelectedTodo}
