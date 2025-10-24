@@ -1,4 +1,4 @@
-import { Category } from '../../App';
+import { Category } from "../../App";
 
 type Props = {
   query: string;
@@ -20,7 +20,7 @@ export const TodoFilter: React.FC<Props> = ({
           <select
             data-cy="statusSelect"
             value={category}
-            onChange={event => {
+            onChange={(event) => {
               onCategoryChange(event.target.value as Category);
             }}
           >
@@ -38,7 +38,7 @@ export const TodoFilter: React.FC<Props> = ({
           className="input"
           placeholder="Search..."
           value={query}
-          onChange={event => {
+          onChange={(event) => {
             onQueryChange(event.target.value);
           }}
         />
@@ -46,13 +46,13 @@ export const TodoFilter: React.FC<Props> = ({
           <i className="fas fa-magnifying-glass" />
         </span>
         {query && (
-          <span className="icon is-right" style={{ pointerEvents: 'all' }}>
+          <span className="icon is-right" style={{ pointerEvents: "all" }}>
             {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
             <button
               data-cy="clearSearchButton"
               type="button"
               className="delete"
-              onClick={() => onQueryChange('')}
+              onClick={() => onQueryChange("")}
             />
           </span>
         )}

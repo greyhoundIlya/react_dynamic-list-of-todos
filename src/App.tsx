@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import React, { useEffect, useState } from "react";
+
 import "bulma/css/bulma.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import { TodoList } from "./components/TodoList";
@@ -34,22 +35,26 @@ export const App: React.FC = () => {
       setSelectedTodo(null);
       setUser(null);
       setIsLoadingModal(false);
+
       return;
     }
 
     const todo = todos.find((t) => t.id === todoId);
-    if (!todo) return;
+
+    if (!todo) {
+      return;
+    }
 
     setIsLoadingModal(true);
     setUser(null);
     setLoaderUser(true);
 
     try {
-      const user = await getUser(todo.userId);
+      const userData = await getUser(todo.userId);
+
       setSelectedTodo(todo);
-      setUser(user);
+      setUser(userData);
     } catch (error) {
-      console.error("Error loading user:", error);
     } finally {
       setLoaderUser(false);
       setIsLoadingModal(false);
@@ -57,22 +62,24 @@ export const App: React.FC = () => {
   };
 
   const filterTodo = (
-    todos: Todo[],
+    todosToFilter: Todo[],
     { filterCategory, filterQuery }: FilterOptions,
   ): Todo[] => {
-    const query = filterQuery.toLowerCase().trim();
+    const searchQuery = filterQuery.toLowerCase().trim();
 
-    return todos.filter((todo) => {
+    return todosToFilter.filter((todo) => {
       const result =
         filterCategory === "all" ||
         (filterCategory === "completed" && todo.completed) ||
         (filterCategory === "active" && !todo.completed);
 
-      const results = !query || todo.title.toLowerCase().includes(query);
+      const results =
+        !searchQuery || todo.title.toLowerCase().includes(searchQuery);
 
       return result && results;
     });
   };
+
   const visibleTodos = filterTodo(todos, {
     filterCategory: category,
     filterQuery: query,
